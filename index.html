@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATCS</title>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html, body {
+    height: 100%;
+    width: 100%;
+}
+body {
+    font-family: "Times New Roman", Times, serif;
+    background: white;
+    color: black;
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+}
+/* Scales the entire composition together */
+.page {
+    transform-origin: center left;
+    padding: 3rem;
+    width: fit-content;
+}
+.container {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+/* Left side list */
+.titles {
+    font-size: 8pt;
+    line-height: 1.5;
+    white-space: nowrap;
+}
+.titles p {
+    margin: 0;
+}
+/* Listen */
+.listen {
+    margin-top: 0;
+}
+.listen a {
+    color: black;
+    text-decoration: underline;
+}
+/* Artwork */
+.artwork {
+    width: 470px;
+    height: 470px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+/* The mobile Listen link is hidden by default (desktop) */
+.listen-mobile {
+    display: none;
+}
+
+/* On phones, shrink the artwork relative to the text so the list
+   dominates the composition instead of the image */
+@media (max-width: 600px) {
+    .artwork {
+        width: 250px;
+        height: 250px;
+    }
+    /* Hide the inline Listen link that lives in the tracklist... */
+    .listen-desktop {
+        display: none;
+    }
+    /* ...and show a centered version beneath the artwork instead */
+    .listen-mobile {
+        display: block;
+        text-align: center;
+        margin-top: 0.75rem;
+        font-size: 8pt;
+    }
+}
+</style>
+</head>
+<body>
+<div class="page" id="page">
+<div class="container">
+<div class="titles">
+<p>ATCS - At the Chips Store</p>
+<br>
+<p>Sleeping in my guitar</p>
+<p>Iho</p>
+<p>Eclair Haze</p>
+<p>At the Chips Store</p>
+<p>Gravel Brother</p>
+<p>Dressed up for McDonalds</p>
+<p>Call Right Back</p>
+<p>Johnston's Revenge</p>
+<p>Terror of Don</p>
+<p>Billy Fog</p>
+<p>When a Person</p>
+<p>Ball and Shame</p>
+<p>Christmas Grease</p>
+<p>A cup of coffee on the cover</p>
+<p>Bill Bean</p>
+<p>Love Cabbage</p>
+<p>Slippery Horse</p>
+<p>Georgio Nanny Furnacé</p>
+<p>Don's Delight</p>
+<p>Skin of the game</p>
+<p>Big Pittance</p>
+<p>Glenn to Glenn</p>
+<p>Picking up where we left Geoff</p>
+<p>Spoken Yogurt</p>
+<p>A balony life</p>
+<p>Diamond in the buff</p>
+<p>Malten Man</p>
+<p>Kirkland Brie</p>
+<p>Little man dance</p>
+<br>
+<div class="listen listen-desktop">
+<a href="https://atcs.bandcamp.com/album/at-the-chips-store" target="_blank">
+Listen
+</a>
+</div>
+</div>
+<div class="artwork-wrap">
+<img class="artwork" src="cover.jpg" alt="ATCS - At the Chips Store album artwork">
+<div class="listen listen-mobile">
+<a href="https://atcs.bandcamp.com/album/at-the-chips-store" target="_blank">
+Listen
+</a>
+</div>
+</div>
+</div>
+</div>
+<script>
+function getViewportSize() {
+    // visualViewport reflects the actually-visible area on mobile,
+    // which shrinks/grows as the browser address bar shows/hides.
+    if (window.visualViewport) {
+        return {
+            width: window.visualViewport.width,
+            height: window.visualViewport.height
+        };
+    }
+    return { width: window.innerWidth, height: window.innerHeight };
+}
+
+function scalePage() {
+    const page = document.getElementById('page');
+    // Reset scale to measure natural (unscaled) size
+    page.style.transform = 'none';
+    const naturalWidth = page.offsetWidth;
+    const naturalHeight = page.offsetHeight;
+
+    const viewport = getViewportSize();
+    const scaleX = viewport.width / naturalWidth;
+    const scaleY = viewport.height / naturalHeight;
+    const scale = Math.min(1, scaleX, scaleY);
+
+    page.style.transform = `scale(${scale})`;
+}
+
+window.addEventListener('load', scalePage);
+window.addEventListener('resize', scalePage);
+window.addEventListener('orientationchange', scalePage);
+if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', scalePage);
+}
+// Rescale once the image has loaded, since it affects natural size
+document.querySelector('.artwork').addEventListener('load', scalePage);
+// Belt-and-suspenders: rescale shortly after load too, in case fonts
+// or the address bar settle a moment after the load event fires.
+window.addEventListener('load', () => setTimeout(scalePage, 300));
+</script>
+</body>
+</html>
